@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Bouncing Ball</title>
+    <link rel="stylesheet" href="ballsStyles.css">
+</head>
+<body>
+<canvas id="canvas"></canvas>
+<h1>Settings</h1>
+<div class="flex-container">
+    <h2>Add balls</h2>
+    <div class="addBallBar red" data-color="red"></div>
+    <div class="addBallBar orange" data-color="orange"></div>
+    <div class="addBallBar yellow" data-color="yellow"></div>
+    <div class="addBallBar green" data-color="green"></div>
+    <div class="addBallBar blue" data-color="blue"></div>
+    <div class="addBallBar purple" data-color="purple"></div>
+</div>
+<div class="flex-container">
+    <h2>Change color of balls</h2>
+    <div class="changeBallColorBar red" data-color="red"></div>
+    <div class="changeBallColorBar orange" data-color="orange"></div>
+    <div class="changeBallColorBar yellow" data-color="yellow"></div>
+    <div class="changeBallColorBar green" data-color="green"></div>
+    <div class="changeBallColorBar blue" data-color="blue"></div>
+    <div class="changeBallColorBar purple" data-color="purple"></div>
+</div>
+<script>
+    let choopacabra = canvas.getContext("2d")
+    canvas.width = 1150
+    canvas.height = 400
+    let width = canvas.width
+    let height = canvas.height
+    let ballRadius = 20
+
+    let random = Math.random() * 10
+    let colors = ["Red", "Orange", "Yellow", "Green", "Blue", "Purple"]
+    let pickRandomColor = function (colors) {
+        return colors[Math.floor(Math.random() * colors.length)]
+    }
+
+
+    let Ball = function (color = null) {
+        this.x = Math.floor(Math.random() * width)
+        this.y = Math.floor(Math.random() * height)
+        this.xSpeed = Math.floor(Math.random() * 10)
+        this.ySpeed = Math.floor(Math.random() * 10)
+        if (color !== null) {
+            this.color = color
+        } else {
+            this.color = pickRandomColor(colors)
+        }
+    }
+
+    let circle = function (x, y, radius, fillCircle, color) {
+        choopacabra.beginPath()
+        choopacabra.arc(x, y, radius, 0, Math.PI * 2, false)
+        choopacabra.fillStyle = color
+        if (fillCircle) {
+            choopacabra.fill()
+        } else {
+            choopacabra.stroke()
+        }
+    }
+
+    Ball.prototype.draw = function () {
+        circle(this.x, this.y, ballRadius, true, this.color)
+    }
+
+    Ball.prototype.move = function () {
+        this.x += this.xSpeed
+        this.y += this.ySpeed
+    }
+
+    Ball.prototype.checkCollision = function () {
+        if (this.x < 0 || this.x > width) {
+            this.xSpeed = -this.xSpeed
+        }
+        if (this.y < 0 || this.y > height) {
+            this.ySpeed = -this.ySpeed
+        }
+    }
+    let balls = []
+    for (let i = 0 ; i < 5 ; i++) {
+        balls[i] = new Ball()
+    }
+
+    setInterval(function () {
+        choopacabra.clearRect(0, 0, width, height)
+        for (let i = 0; i < balls.length; i++) {
+            balls[i].draw()
+            balls[i].move()
+            balls[i].checkCollision()
+        }
+        choopacabra.strokeRect(0, 0, width, height)
+    }, 100)
+
+    const addBall = (color) => {
+        balls.push(new Ball(color))
+    }
+    let addBallBar = document.querySelectorAll(".addBallBar")
+    for (let i = 0; i < addBallBar.length; i++) {
+        if (document.addEventListener) {
+            addBallBar[i].addEventListener("click", function () {
+                addBall(addBallBar[i].dataset.color)
+            })
+        } else {
+            addBallBar[i].attachEvent("onclick", function () {
+                // use buttons[i] to target clicked button
+            })
+        }
+    }
+
+    const changeBallColor = (color) => {
+        balls.forEach((element) => {
+            console.log(color)
+            console.log(element.color)
+            console.log(element)
+            element.color = color
+        })
+    }
+    let changeBallColorBar = document.querySelectorAll(".changeBallColorBar")
+    for (let i = 0; i < changeBallColorBar.length; i++) {
+        if (document.addEventListener) {
+            changeBallColorBar[i].addEventListener("click", function () {
+                changeBallColor(changeBallColorBar[i].dataset.color)
+            })
+        } else {
+            addBallBar[i].attachEvent("onclick", function () {
+                // use buttons[i] to target clicked button
+            })
+        }
+    }
+
+    window.addEventListener("click", (event) => {
+        let clickX = event.offsetX
+        let clickY = event.offsetY
+        let clickRadius;
+        for( let i = 0; i < balls.length; i++ ){
+             clickRadius = Math.sqrt((balls[i].x - clickX) ** 2 + (balls[i].y  - clickY) ** 2)
+            if (clickRadius <= ballRadius) {
+                balls.splice(i,1)
+            }
+        }
+    })
+</script>
+</body>
+</html>

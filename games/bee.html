@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<!--
+Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+Click nbfs://nbhost/SystemFileSystem/Templates/Project/PHP/PHPProject.php to edit this template
+-->
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title></title>
+ <style>
+       * {
+   margin: 0;
+   padding: 0;
+}
+    </style>
+    </head>
+    <body>
+        <canvas id="canvas" width="500" height="500" ></canvas>
+<!--        <script src="https://code.jquery.com/jquery-2.1.0.js"></script>-->
+        <script>
+            var canvas = document.getElementById("canvas");
+            var ctx = canvas.getContext("2d");
+            
+            var x = 100;
+            var y = 100;
+            
+            var circle = function (x, y, radius, fillCircle) {
+                ctx.beginPath();
+                ctx.arc(x, y, radius, 0, Math.PI * 2, false);
+                if (fillCircle) {
+                    ctx.fill();
+                } else {
+                    ctx.stroke();
+                }
+            };
+            
+            var drawBee = function (x, y) {
+                ctx.lineWidth = 2;
+                ctx.strokeStyle = "Black";
+                ctx.fillStyle = "Gold";
+                
+                circle(x, y, 8, true);
+                circle(x, y, 8, false);
+                circle(x - 5, y - 11, 5, false);
+                circle(x + 5, y - 11, 5, false);
+                circle(x - 2, y - 1, 2, false);
+                circle(x + 2, y - 1, 2, false);
+            };
+            
+            var update = function (coordinate) {
+                var offset = Math.random() * 10 - 5;
+                coordinate += offset;
+                 
+                if (coordinate > 1000) {
+                    coordinate = 1000;
+                }
+                if (coordinate < 0) {
+                    coordinate = 0;
+                }
+                return coordinate;
+            };
+            
+            setInterval(function () {
+                ctx.clearRect(0, 0, 1000, 1000);
+                drawBee(x, y);
+                x = update (x);
+                y = update (y);
+                ctx.strokeRect(0, 0, 1000, 1000);
+            }, 5);
+        </script>
+    </body>
+</html>

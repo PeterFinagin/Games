@@ -1,0 +1,44 @@
+
+.flex-container {
+    margin-top: 20px;
+    display: flex;
+    flex-wrap: nowrap;
+    background-color: DodgerBlue;
+    justify-content: space-around;
+    border-radius: 5px;
+}
+
+.flex-container > div {
+    width: 50px;
+    height: 50px;
+    margin: 10px;
+    border-radius: 50%;
+}
+
+h1 {
+    margin-left: 40px;
+    color: #842029;
+}
+
+h2 {
+    color: #6a1a21;
+}
+
+.red {
+    background-color: red;
+}
+.orange {
+    background-color: orange;
+}
+.yellow {
+    background-color: yellow;
+}
+.green {
+    background-color: green;
+}
+.blue {
+    background-color: blue;
+}
+.purple {
+    background-color: purple;
+}

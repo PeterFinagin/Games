@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title></title>
+    </head>
+    <body>
+    <h1 id="heading">Hello world!</h1>
+        <script src="https://code.jquery.com/jquery-2.1.0.js"></script>
+        <script>
+            let topOffset = 100
+            let leftOffset = 100
+            let stateElement = 'lu';
+            let intervalTime = 1000;
+            let count = 0;
+            let moveHeadingLeft = function () {
+                $("#heading").offset({top: topOffset, left: leftOffset});
+
+                if (leftOffset === 100 && topOffset === 100) {
+                    stateElement = 'lu';
+                } else if (leftOffset === 400 && topOffset === 100) {
+                    stateElement = 'ru';
+                } else if (leftOffset === 400 && topOffset === 400) {
+                    stateElement = 'rd';
+                } else if (leftOffset === 100 && topOffset === 400) {
+                    stateElement = 'ld';
+                }
+
+                if (stateElement === 'lu') {
+                    leftOffset = 400;
+                } else if (stateElement === 'ru') {
+                    topOffset = 400;
+                } else if (stateElement === 'rd') {
+                    leftOffset = 100;
+                } else if (stateElement === 'ld') {
+                    topOffset = 100;
+                }
+            }
+           
+            let interval = setInterval(moveHeadingLeft, intervalTime);
+            $("#heading").click( function(){
+                if (count > 9) {
+                   $(this).html("<b style='color:red'>You win!</b>");
+                   clearInterval(interval);
+                }else {
+                    count++;
+                    $(this).html("<b style='color:red'>You clicked "+count+" times</b>");
+                    clearInterval(interval);
+                    intervalTime-=90;
+                    interval = setInterval(moveHeadingLeft, intervalTime);
+                }
+            });
+
+        </script>
+    </body>
+</html>

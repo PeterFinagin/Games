@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Putting User Input into JS Objects</title>
+
+    <style>
+        .cardBlock {
+            background-color: aquamarine;
+            padding: 20px;
+            max-width: 300px;
+            margin: 20px;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .item {
+            height: auto;
+            position: relative;
+            background-color: cornsilk;
+            text-align: center;
+            margin: 20px;
+            border-radius: 5px;
+        }
+        .butDel {
+            margin: 10px;
+            height: 20px;
+            width: 20%;
+            border: solid 2px darkolivegreen;
+            border-radius: 5px;
+        }
+    </style>
+
+</head>
+<body>
+<form id="myForm">
+    <input type="text" id="eng">
+    <input type="text" id="ua">
+    <button type="button" id="save">Save</button>
+    <button type="button" id="delete">Delete</button>
+</form>
+<p id="attention"></p>
+<div id="eng_attention"></div>
+<div id="ua_attention"></div>
+<div class="cardBlock" id="wrap"></div>
+
+<script>
+
+    if (!localStorage.key('words')) {
+        localStorage.setItem('words', JSON.stringify([]));
+    }
+
+    function checkCondition() {
+    let words = JSON.parse(localStorage.getItem('words'));
+    let word = {
+        eng: document.getElementById("eng").value,
+        ua: document.getElementById("ua").value,
+    };
+
+    if (word.eng == "") {
+        words = words.filter((a) => {
+            return a.ua !== word.ua;
+        });
+    } else if (word.ua == "") {
+        words = words.filter((a) => {
+            return a.eng !== word.eng;
+        });
+    } else {
+        words = words.filter((a) => {
+            return JSON.stringify(a) !== JSON.stringify(word);
+        });
+    }
+    localStorage.setItem('words', JSON.stringify(words));
+    }
+
+
+    // const shuffledArray = words.sort((a, b) => 0.5 - Math.random());
+    // console.log(shuffledArray);
+
+
+    // create new div (card block)
+    function createCardBlock() {
+        const wrapper = document.querySelector('.cardBlock');
+        const words = JSON.parse(localStorage.getItem('words'));
+
+        const renderFn = (items) => {
+            let wrap = document.getElementById("wrap");
+            if (items.length === 0) return wrap.innerHTML = "Your list is empty.";
+            wrap.innerHTML = null;
+            items.forEach(el => {   //callback function for each element in array
+                let element = document.createElement('div');
+                let buttonDelete = document.createElement('button');
+                element.classList.add('item'); // add class to element
+                buttonDelete.classList.add('butDel');
+                element.eng = el.eng;
+                element.ua = el.ua;
+                element.buttonDelete = el.buttonDelete
+                element.textContent = el.eng + " - " + el.ua; // represent content in this element
+                wrap.appendChild(element); // add element to card block
+                buttonDelete.setAttribute("data-eng-word", el.eng);
+                element.appendChild(buttonDelete);
+                buttonDelete.textContent = "Delete";
+
+                buttonDelete.addEventListener('click', e => { //event handler
+                    let targetWord = {eng:e.target.dataset.engWord};
+                    // renderFn(removeItem(words, targetWord));
+                    console.log(targetWord);
+                })
+            })
+        };
+
+        renderFn(words);
+    }
+
+
+    function allReset() {
+        document.getElementById("myForm").reset();
+        document.getElementById('attention').innerHTML = "";
+        document.getElementById('eng_attention').innerHTML = "";
+        document.getElementById('ua_attention').innerHTML = "";
+    }
+
+
+    // store object in local storage
+    function Save () {
+        document.getElementById("save").onclick = function inputWord() {
+            let words = JSON.parse(localStorage.getItem('words'));
+            let word = {
+                eng: document.getElementById("eng").value,
+                ua: document.getElementById("ua").value,
+            };
+
+            let eng = document.getElementById("eng").value;
+            let ua = document.getElementById("ua").value;
+            if (/[А-Яа-я]/gi.test(eng)) {
+                document.getElementById("eng_attention").innerHTML = "Only latin alphabet!!!";
+            } else if (/[A-Za-z]/gi.test(ua)) {
+                document.getElementById("ua_attention").innerHTML = "Only cyrillic alphabet!!!";
+            } else if (localStorage.getItem('words').includes(JSON.stringify(word))) {
+                document.getElementById('attention').innerHTML = "This word is in your list!!!";
+            } else if (word.ua == "" || word.eng == "") {
+                document.getElementById('attention').innerHTML = "Not enough information!!!";
+            } else {
+                words.push(word);
+            allReset();
+            }
+            localStorage.setItem('words', JSON.stringify(words));
+            createCardBlock();
+        }
+    }
+
+    // delete object from array
+    function Delete() {
+        document.getElementById("delete").onclick = function removeWord() {
+            // let words = JSON.parse(localStorage.getItem('words'));
+            //     let word = {
+            //         eng: document.getElementById("eng").value,
+            //         ua: document.getElementById("ua").value,
+            //     };
+            //
+            //     if (word.eng == "") {
+            //         words = words.filter((a) => {
+            //             return a.ua !== word.ua;
+            //         });
+            //     } else if (word.ua == "") {
+            //         words = words.filter((a) => {
+            //             return a.eng !== word.eng;
+            //         });
+            //     } else {
+            //         words = words.filter((a) => {
+            //             return JSON.stringify(a) !== JSON.stringify(word);
+            //         });
+            //     }
+            //     localStorage.setItem('words', JSON.stringify(words));
+            // }
+            checkCondition();
+            allReset();
+            createCardBlock();
+            // localStorage.setItem('words', JSON.stringify(words));
+        }
+    }
+
+    createCardBlock();
+    Save();
+    Delete();
+
+</script>
+</body>
+</html>
