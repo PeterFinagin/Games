@@ -1,21 +1,40 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>"Hangman"</title>
+    <meta charset="UTF-8">
+    <title>Diver</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="diverStyles.css"/>
 </head>
 <body>
-<span id="message"> First name:</span> <input id="first_name">
-<button id="say"> OK!</button>
+<div class="wrapper">
+    <div class="container1">
+        <span id="message"> First name:</span> <input id="first_name">
+        <button id="say"> OK!</button>
 
-<hr>
-<div id="result"></div>
-<div id="answer"></div>
-<div id="count"></div>
-<canvas id="canvas" width="1200" height="1200" style="border: 1px solid #000000"></canvas>
+        <hr>
+        <div id="result"></div>
+        <div id="answer"></div>
+        <div id="count"></div>
+        <canvas id="canvas" width="auto" height="auto">
+            <!--        style="border: 1px solid #000000"-->
+        </canvas>
+    </div>
+    <div class="container2">
+        <div id="diver">
+            <img src="diver1.1.png">
+        </div>
+            <div id="count4">4</div>
+            <div id="count3">3</div>
+            <div id="count2">2</div>
+            <div id="count1">1</div>
+    </div>
+</div>
 <script src="https://code.jquery.com/jquery-2.1.0.js"></script>
 
+
 <script>
+
     let words = [
         "cat",
         "chair",
@@ -196,43 +215,33 @@
         ctx.fillText(guessLetter, locationX2, locationY2);
     };
 
-
-
-    let dyapchik = function () {
-        let canvas = document.getElementById("canvas");
+    let diver = function () {
         let ctx = canvas.getContext("2d");
-
-        ctx.strokeStyle = "black";
-        ctx.lineWidth = 4;
-        ctx.beginPath();
         if (count === 5) {
-            ctx.moveTo(100, 100);
-            ctx.lineTo(100, 150);
-        } else if (count === 4) {
-            ctx.moveTo(100, 120);
-            ctx.lineTo(70, 90);
-        } else if (count === 3) {
-            ctx.moveTo(100, 120);
-            ctx.lineTo(130, 90);
-        } else if (count === 2) {
-            ctx.moveTo(100, 150);
-            ctx.lineTo(90, 200);
-        } else if (count === 1) {
-            ctx.moveTo(100, 150);
-            ctx.lineTo(110, 200);
+            document.getElementById('diver').style.display = 'block';
+        } else {
+            document.getElementById('diver').style.display = 'none';
         }
-
-        ctx.stroke();
-
-        let circleModify = function (x, y, radius) {
-            ctx.beginPath();
-            ctx.arc(x, y, radius, 0, Math.PI * 2, false);
-            ctx.stroke();
-            ctx.fill();
-        };
-        ctx.lineWidth = 0;
-        ctx.fillStyle = "Black";
-        circleModify(100, 90, 10);
+        if (count === 4) {
+            document.getElementById('count4').style.display = 'block';
+        } else {
+            document.getElementById('count4').style.display = 'none';
+        }
+        if (count === 3) {
+            document.getElementById('count3').style.display = 'block';
+        } else {
+            document.getElementById('count3').style.display = 'none';
+        }
+        if (count === 2) {
+            document.getElementById('count2').style.display = 'block';
+        } else {
+            document.getElementById('count2').style.display = 'none';
+        }
+        if (count === 1) {
+            document.getElementById('count1').style.display = 'none';
+        } else {
+            document.getElementById('count1').style.display = 'none';
+        }
     };
 
     for (let i = 0; i < word.length; i++) {
@@ -256,7 +265,7 @@
         let letter = $("#first_name").val();
         if (count === 1) {
             count = 0;
-            $("#answer").html("You are looser !!!");
+            $("#answer").html("You are loose !!!");
             $("#count").html("count " + count);
             return;
         }
@@ -318,7 +327,7 @@
             notRightLetter = letter;
             x += 30;
             $("#answer").html("Not right letter.");
-            dyapchik();
+            diver();
             cross();
         } else {
             $("#answer").html("");
@@ -329,8 +338,9 @@
     $("#result").html(answerArray.join(" "));
     $("#answer").html();
 
+    diver()
+
 </script>
 
 </body>
-</html>
 </html>

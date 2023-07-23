@@ -1,0 +1,60 @@
+body {
+    margin-top: 5vw;
+    background-color: lightskyblue;
+}
+.wrapper {
+   display: flex;
+    width: 100vw;
+    height: 100vh;
+}
+
+.container1 {
+    border: black solid;
+    width: 50vw;
+    height: auto;
+    background-image: url(1000_F.jpg);
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: right;
+}
+
+.container2 {
+    border: black solid;
+    width: 50vw;
+    height: auto;
+    background-image: url(1000_F.jpg);
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: right;
+}
+.container2 img{
+    width: 10vw;
+    height: 17vw;
+}
+
+#count4 {
+    width: 100px;
+    height: 100px;
+    background-color: red;
+    border: black;
+    color: #0c4128;
+    font-size: 30px;
+}
+#count3 {
+    width: 100px;
+    height: 100px;
+    background-color: yellow;
+    border: black;
+}
+#count2 {
+    width: 100px;
+    height: 100px;
+    background-color: blue;
+    border: black;
+}
+#count1 {
+    width: 100px;
+    height: 100px;
+    background-color: green;
+    border: black;
+}
