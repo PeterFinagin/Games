@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>"Hangman"</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+<span id="message"> First name:</span> <input id="first_name">
+<button id="say"> OK!</button>
+
+<hr>
+<div id="result"></div>
+<div id="answer"></div>
+<div id="count"></div>
+<canvas id="canvas" width="1200" height="1200" style="border: 1px solid #000000"></canvas>
+<script src="https://code.jquery.com/jquery-2.1.0.js"></script>
+
+<script>
+    let words = [
+        "cat",
+        "chair",
+        "pizza"
+    ];
+
+    let word = words[Math.floor(Math.random() * words.length)];
+    let remainingLetters = word.length;
+    let answerArray = [];
+    let count = 6;
+    let guessedRight = false;
+    let x = 300;
+    let y = 380;
+    let notRightLetter = "";
+
+    let cross = function () {
+        let canvas = document.getElementById("canvas");
+        let ctx = canvas.getContext("2d");
+        ctx.strokeStyle = "black";
+        ctx.lineWidth = 3;
+        ctx.beginPath();
+        ctx.moveTo(x, y);
+        ctx.lineTo(x + 20, y + 20);
+        ctx.moveTo(x + 20, y);
+        ctx.lineTo(x, y + 20);
+        ctx.stroke();
+
+        let locationX = x + 10;
+        let locationY = y + 10;
+        ctx.fillStyle = "Black";
+        ctx.font = "30px Courier";
+        ctx.textAlign = "center";
+        ctx.textBaseline = "middle";
+        ctx.fillText(notRightLetter, locationX, locationY);
+    };
+
+    let catLines = function () {
+        let canvas = document.getElementById("canvas");
+        let ctx = canvas.getContext("2d");
+        ctx.strokeStyle = "black";
+        ctx.lineWidth = 4;
+        ctx.beginPath();
+        ctx.moveTo(30, 400);
+        ctx.lineTo(60, 400);
+        ctx.moveTo(70, 400);
+        ctx.lineTo(100, 400);
+        ctx.moveTo(110, 400);
+        ctx.lineTo(140, 400);
+        ctx.stroke();
+    };
+
+    let chairAndPizzaLines = function () {
+        let canvas = document.getElementById("canvas");
+        let ctx = canvas.getContext("2d");
+        ctx.strokeStyle = "black";
+        ctx.lineWidth = 4;
+        ctx.beginPath();
+        ctx.moveTo(30, 400);
+        ctx.lineTo(60, 400);
+        ctx.moveTo(70, 400);
+        ctx.lineTo(100, 400);
+        ctx.moveTo(110, 400);
+        ctx.lineTo(140, 400);
+        ctx.moveTo(150, 400);
+        ctx.lineTo(180, 400);
+        ctx.moveTo(190, 400);
+        ctx.lineTo(220, 400);
+        ctx.stroke();
+    };
+
+
+    let catChairC = function () {
+        let canvas = document.getElementById("canvas");
+        let ctx = canvas.getContext("2d");
+        let guessLetter = "c";
+        let locationX = 45;
+        let locationY = 390;
+        ctx.fillStyle = "Black";
+        ctx.font = "30px Courier";
+        ctx.textAlign = "center";
+        ctx.textBaseline = "middle";
+        ctx.fillText(guessLetter, locationX, locationY);
+
+    };
+
+    let catA = function () {
+        let canvas = document.getElementById("canvas");
+        let ctx = canvas.getContext("2d");
+        let guessLetter = "a";
+        let locationX = 85;
+        let locationY = 390;
+        ctx.fillStyle = "Black";
+        ctx.font = "30px Courier";
+        ctx.textAlign = "center";
+        ctx.textBaseline = "middle";
+        ctx.fillText(guessLetter, locationX, locationY);
+
+    };
+
+    let catT = function () {
+        let canvas = document.getElementById("canvas");
+        let ctx = canvas.getContext("2d");
+        let guessLetter = "t";
+        let locationX = 125;
+        let locationY = 390;
+        ctx.fillStyle = "Black";
+        ctx.font = "30px Courier";
+        ctx.textAlign = "center";
+        ctx.textBaseline = "middle";
+        ctx.fillText(guessLetter, locationX, locationY);
+    };
+
+    let chairH = function () {
+        let canvas = document.getElementById("canvas");
+        let ctx = canvas.getContext("2d");
+        let guessLetter = "h";
+        let locationX = 85;
+        let locationY = 390;
+        ctx.fillStyle = "Black";
+        ctx.font = "30px Courier";
+        ctx.textAlign = "center";
+        ctx.textBaseline = "middle";
+        ctx.fillText(guessLetter, locationX, locationY);
+    };
+
+    let chairA = function () {
+        let canvas = document.getElementById("canvas");
+        let ctx = canvas.getContext("2d");
+        let guessLetter = "a";
+        let locationX = 125;
+        let locationY = 390;
+        ctx.fillStyle = "Black";
+        ctx.font = "30px Courier";
+        ctx.textAlign = "center";
+        ctx.textBaseline = "middle";
+        ctx.fillText(guessLetter, locationX, locationY);
+    };
+
+    let chairI = function () {
+        let canvas = document.getElementById("canvas");
+        let ctx = canvas.getContext("2d");
+        let guessLetter = "i";
+        let locationX = 165;
+        let locationY = 390;
+        ctx.fillStyle = "Black";
+        ctx.font = "30px Courier";
+        ctx.textAlign = "center";
+        ctx.textBaseline = "middle";
+        ctx.fillText(guessLetter, locationX, locationY);
+    };
+
+    let chairR = function () {
+        let canvas = document.getElementById("canvas");
+        let ctx = canvas.getContext("2d");
+        let guessLetter = "r";
+        let locationX = 205;
+        let locationY = 390;
+        ctx.fillStyle = "Black";
+        ctx.font = "30px Courier";
+        ctx.textAlign = "center";
+        ctx.textBaseline = "middle";
+        ctx.fillText(guessLetter, locationX, locationY);
+    };
+
+    let pizzaZ = function () {
+        let canvas = document.getElementById("canvas");
+        let ctx = canvas.getContext("2d");
+        let guessLetter = "z";
+        let locationX1 = 125;
+        let locationY1 = 390;
+        let locationX2 = 165;
+        let locationY2 = 390;
+        ctx.fillStyle = "Black";
+        ctx.font = "30px Courier";
+        ctx.textAlign = "center";
+        ctx.textBaseline = "middle";
+        ctx.fillText(guessLetter, locationX1, locationY1);
+        ctx.fillText(guessLetter, locationX2, locationY2);
+    };
+
+
+
+    let dyapchik = function () {
+        let canvas = document.getElementById("canvas");
+        let ctx = canvas.getContext("2d");
+
+        ctx.strokeStyle = "black";
+        ctx.lineWidth = 4;
+        ctx.beginPath();
+        if (count === 5) {
+            ctx.moveTo(100, 100);
+            ctx.lineTo(100, 150);
+        } else if (count === 4) {
+            ctx.moveTo(100, 120);
+            ctx.lineTo(70, 90);
+        } else if (count === 3) {
+            ctx.moveTo(100, 120);
+            ctx.lineTo(130, 90);
+        } else if (count === 2) {
+            ctx.moveTo(100, 150);
+            ctx.lineTo(90, 200);
+        } else if (count === 1) {
+            ctx.moveTo(100, 150);
+            ctx.lineTo(110, 200);
+        }
+
+        ctx.stroke();
+
+        let circleModify = function (x, y, radius) {
+            ctx.beginPath();
+            ctx.arc(x, y, radius, 0, Math.PI * 2, false);
+            ctx.stroke();
+            ctx.fill();
+        };
+        ctx.lineWidth = 0;
+        ctx.fillStyle = "Black";
+        circleModify(100, 90, 10);
+    };
+
+    for (let i = 0; i < word.length; i++) {
+        answerArray[i] = "_";
+    }
+    if (word === words[0]) {
+        var guess = "It is a pet: ";
+        catLines();
+
+    } else if (word === words[1]) {
+        var guess = "It is a furniture: ";
+        chairAndPizzaLines();
+    } else if (word === words[2]) {
+        var guess = "It is a food: ";
+        chairAndPizzaLines();
+    }
+
+    $('#message').html(guess);
+    $("#count").html("count " + count);
+    $("#say").click(function () {
+        let letter = $("#first_name").val();
+        if (count === 1) {
+            count = 0;
+            $("#answer").html("You are looser !!!");
+            $("#count").html("count " + count);
+            return;
+        }
+        if (count === 0) {
+            return;
+        }
+        if (letter === "") {
+            $("#answer").html("Pleas enter a letter.");
+            $("#first_name").val("").focus();
+            return;
+        } else if (letter.length !== 1) {
+            $("#answer").html("Pleas enter a single letter.");
+            $("#first_name").val("").focus();
+            return;
+        } else if (/[0-9]/.test(letter)) {
+            $("#answer").html("Pleas enter only a letter.");
+            return;
+        } else if (!/[a-zA-Z]/.test(letter)) {
+            $("#answer").html("Pleas enter another a letter.");
+            return;
+        } else {
+            guessedRight = false;
+            for (let j = 0; j < word.length; j++) {
+                if (word[j] === letter && answerArray[j] === "_") {
+                    answerArray[j] = letter;
+                    remainingLetters--;
+                    guessedRight = true;
+                }
+                if (word === words[0] && letter === "c") {
+                    catChairC();
+                } else if (word === words[0] && letter === "a") {
+                    catA();
+                } else if (word === words[0] && letter === "t") {
+                    catT();
+                } else if (word === words[1] && letter === "c") {
+                    catChairC();
+                } else if (word === words[1] && letter === "h") {
+                    chairH();
+                } else if (word === words[1] && letter === "a") {
+                    chairA();
+                } else if (word === words[1] && letter === "i") {
+                    chairI();
+                } else if (word === words[1] && letter === "r") {
+                    chairR();
+                } else if (word === words[2] && letter === "z") {
+                    pizzaZ();
+                }
+            }
+        }
+        $("#result").html(answerArray.join(" "));
+        $("#answer").html();
+        if (remainingLetters === 0) {
+            $("#answer").html("You are winner !!!");
+            return;
+        }
+
+        if (!guessedRight) {
+            count--;
+            notRightLetter = letter;
+            x += 30;
+            $("#answer").html("Not right letter.");
+            dyapchik();
+            cross();
+        } else {
+            $("#answer").html("");
+        }
+        $("#first_name").val("").focus();
+        $("#count").html("count " + count);
+    });
+    $("#result").html(answerArray.join(" "));
+    $("#answer").html();
+
+</script>
+
+</body>
+</html>
+</html>
